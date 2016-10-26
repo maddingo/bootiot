@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 
-@WebServlet("/twilioinput")
+@WebServlet(urlPatterns = {
+        "/twilioinput",
+        "/twilioinput/*"
+})
 public class TwilioInputServlet extends HttpServlet {
 
     @Override
