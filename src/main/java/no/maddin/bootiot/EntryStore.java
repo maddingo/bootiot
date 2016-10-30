@@ -1,5 +1,9 @@
 package no.maddin.bootiot;
 
+import java.util.Collection;
+
 public interface EntryStore {
-    Iterable<BootMeasureEntry> getAll();
+    Collection<BootMeasureEntry> getAll();
+
+    void saveJson(String json);
 }
