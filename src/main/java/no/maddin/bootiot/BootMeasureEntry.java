@@ -10,9 +10,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public class BootMeasureEntry {
     int counter;
-    float temp;   // temperature
-    float hum;    // humidity
-    float water;  // water level
-    float batt;   // battery level
+    Double temp;   // temperature
+    Double hum;    // humidity
+    Double water;  // water level
+    Double batt;   // battery level
 
 }
