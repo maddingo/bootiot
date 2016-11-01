@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import java.util.Date;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -14,5 +15,6 @@ public class BootMeasureEntry {
     Double hum;    // humidity
     Double water;  // water level
     Double batt;   // battery level
+    Date timestamp; // timestamp
 
 }
