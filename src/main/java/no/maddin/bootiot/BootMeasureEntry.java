@@ -4,7 +4,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.temporal.Temporal;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -15,6 +17,6 @@ public class BootMeasureEntry {
     Double hum;    // humidity
     Double water;  // water level
     Double batt;   // battery level
-    Date timestamp; // timestamp
+    String timestamp; // timestamp
 
 }

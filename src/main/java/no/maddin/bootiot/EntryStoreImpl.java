@@ -1,15 +1,14 @@
 package no.maddin.bootiot;
 
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.function.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParser;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.datetime.DateFormatter;
+
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Map;
 
 
 public class EntryStoreImpl implements EntryStore {
@@ -34,8 +33,20 @@ public class EntryStoreImpl implements EntryStore {
             Double hum = (Double) map.get("hum");
             Double water = (Double) map.get("water");
             Double batt = (Double) map.get("batt");
+            ZonedDateTime timestamp = ZonedDateTime.now(ZoneOffset.UTC);
 
-            list.addFirst(new BootMeasureEntry(counter == null ? list.size() : counter, temp, hum, water, batt, new Date()));
+            BootMeasureEntry entry = new BootMeasureEntry(counter == null ? list.size() : counter, temp, hum, water, batt, timestamp.toString());
+            if (!list.offerFirst(entry)) {
+                list.removeLast();
+                list.addFirst(entry);
+            }
+        }
+    }
+
+    @Override
+    public void purgeAll() {
+        synchronized (list) {
+            list.clear();
         }
     }
 }

@@ -6,4 +6,6 @@ public interface EntryStore {
     Collection<BootMeasureEntry> getAll();
 
     void saveJson(String json);
+
+    void purgeAll();
 }
