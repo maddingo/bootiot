@@ -55,10 +55,10 @@ public class TwilioInputServlet extends HttpServlet {
     @Autowired
     private EntryStore entryStore;
 
-    @Value("${TWILIO_SERVICE_SID:T(java.util.UUID).randomUUID().toString()}")
+    @Value("${TWILIO_SERVICE_SID:}")
     private String serviceSid;
 
-    @Value("${TWILIO_ACCOUNT_SID:T(java.util.UUID).randomUUID().toString()}")
+    @Value("${TWILIO_ACCOUNT_SID:}")
     private String accountSid;
 
     @Value("${ERROR_SMS_RECEIVER:}")
