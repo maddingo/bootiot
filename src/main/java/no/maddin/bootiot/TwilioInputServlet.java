@@ -68,13 +68,12 @@ public class TwilioInputServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String[]> parameterMap = req.getParameterMap();
         checkCredentials(parameterMap);
-        Writer writer = resp.getWriter();
 
         try {
             saveEntry(parameterMap);
-            sendSuccessResponse(resp, writer, parameterMap);
+            sendSuccessResponse(resp, parameterMap);
         } catch (IllegalArgumentException ex) {
-            sendErrorResponse(resp, writer, parameterMap, ex);
+            sendErrorResponse(resp, parameterMap, ex);
         }
     }
 
@@ -99,19 +98,19 @@ public class TwilioInputServlet extends HttpServlet {
         }
     }
 
-    private void sendSuccessResponse(HttpServletResponse resp, Writer writer, Map<String, String[]> parameterMap) throws IOException {
+    private void sendSuccessResponse(HttpServletResponse resp, Map<String, String[]> parameterMap) throws IOException {
         resp.setContentType("application/xml");
         try {
+            Writer writer = resp.getWriter();
             String respString = new MessagingResponse.Builder().build().toXml();
             writer.append(respString);
         } catch (TwiMLException e) {
             throw new IOException(e);
         }
-//        writer.append("<Response/>");
     }
 
-    private void sendErrorResponse(HttpServletResponse resp, Writer writer, Map<String, String[]> parameterMap, Throwable tr) throws IOException {
-        resp.setContentType("text/xml");
+    private void sendErrorResponse(HttpServletResponse resp, Map<String, String[]> parameterMap, Throwable tr) throws IOException {
+        resp.setContentType("application/xml");
 
         MessagingResponse.Builder b = new MessagingResponse.Builder();
         if (!StringUtils.isEmpty(errorMessageReceiver)) {
@@ -127,6 +126,7 @@ public class TwilioInputServlet extends HttpServlet {
         logParameters(parameterMap, errorRequestString);
         log.error("Received erroneous message: " + errorRequestString.toString());
         try {
+            Writer writer = resp.getWriter();
             writer.append(b.build().toXml());
         } catch (TwiMLException e) {
             throw new IOException(e);
