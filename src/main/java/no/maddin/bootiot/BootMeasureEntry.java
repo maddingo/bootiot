@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
 
 @Data
@@ -17,6 +18,5 @@ public class BootMeasureEntry {
     Double hum;    // humidity
     Double water;  // water level
     Double batt;   // battery level
-    String timestamp; // timestamp
-
+    ZonedDateTime timestamp; // timestamp
 }
