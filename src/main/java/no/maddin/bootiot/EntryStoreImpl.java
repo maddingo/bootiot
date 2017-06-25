@@ -30,7 +30,7 @@ public class EntryStoreImpl implements EntryStore {
 
     @Override
     public BootMeasureEntry getLatest() {
-        return list.getFirst();
+        return list.peekFirst();
     }
 
     @Override

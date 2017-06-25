@@ -2,8 +2,8 @@ package no.maddin.bootiot;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +11,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.info.InfoContributor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.common.base.Optional;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BootiotController {
 
     private  ThreadLocal<SimpleDateFormat> dtFormatter = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
+
     @Value("${app.version}")
     private String appVersion;
 
@@ -36,9 +40,16 @@ public class BootiotController {
 
     private AtomicBoolean warningSent = new AtomicBoolean();
 
-    @RequestMapping(path="/bootiot", method = RequestMethod.GET)
-    public Iterable<BootMeasureEntry> entries() {
-        return entryStore.getAll();
+    @RequestMapping(path="/bootiot/{item}", method = RequestMethod.GET)
+    public Iterable<BootMeasureEntry> entries(@PathVariable(name="item", required = false) String item) {
+
+        switch(item == null ? "all" : item) {
+            case "last":
+                return Collections.singletonList(entryStore.getLatest());
+            case "all":
+            default:
+                return entryStore.getAll();
+        }
     }
 
     @RequestMapping(path = "/purge", method = RequestMethod.DELETE)
