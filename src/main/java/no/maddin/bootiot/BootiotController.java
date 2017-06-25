@@ -1,6 +1,11 @@
 package no.maddin.bootiot;
 
-import lombok.extern.slf4j.Slf4j;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.info.InfoContributor;
@@ -10,12 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
@@ -30,6 +30,11 @@ public class BootiotController {
 
     @Autowired
     private EntryStore entryStore;
+
+    @Autowired
+    private ErrorMessageSender errorMessageSender;
+
+    private AtomicBoolean warningSent = new AtomicBoolean();
 
     @RequestMapping(path="/bootiot", method = RequestMethod.GET)
     public Iterable<BootMeasureEntry> entries() {
@@ -57,16 +62,16 @@ public class BootiotController {
         if (latestEntry != null) {
             ZonedDateTime timestamp = latestEntry.getTimestamp();
 
-            ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+            ZonedDateTime now = ZonedDateTime.now();
             Duration between = Duration.between(timestamp, now);
             if (between.getSeconds() > updateinterval) {
-                sendEmailWarning();
+                if (warningSent.compareAndSet(false, true)) {
+                    errorMessageSender.sendMessage("Haven't heard from the boot for a while. Last message received at " + timestamp);
+                }
+            } else {
+                warningSent.set(false);
             }
         }
         log.info("checking interval");
-    }
-
-    private void sendEmailWarning() {
-
     }
 }

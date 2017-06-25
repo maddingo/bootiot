@@ -17,7 +17,6 @@ import static org.hamcrest.Matchers.notNullValue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TwilioInputTest {
 
-
     @Autowired
     private TestRestTemplate restTemplate;
 
