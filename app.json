@@ -18,6 +18,8 @@
 
   ],
   "buildpacks": [
-    "java"
+    {
+      "url": "heroku/java"
+    }
   ]
 }
