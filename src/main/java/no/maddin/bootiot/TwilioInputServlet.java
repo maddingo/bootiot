@@ -1,26 +1,27 @@
 package no.maddin.bootiot;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.twilio.twiml.Body;
-import com.twilio.twiml.Message;
-import com.twilio.twiml.MessagingResponse;
-import com.twilio.twiml.TwiMLException;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.StringUtils;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Arrays;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.regex.*;
+
+import com.twilio.twiml.messaging.Body;
+import com.twilio.twiml.messaging.Message;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
+
+import com.twilio.twiml.MessagingResponse;
+import com.twilio.twiml.TwiMLException;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * RequestParameters:
@@ -117,7 +118,7 @@ public class TwilioInputServlet extends HttpServlet {
             b.message(
               new Message.Builder()
                       .to(errorMessageReceiver)
-                      .body(new Body("Received erroneous message: Check message log at https://papertrailapp.com/dashboard"))
+                      .body(new Body.Builder("Received erroneous message: Check message log at https://papertrailapp.com/dashboard").build())
                       .build()
             );
         }
