@@ -20,7 +20,7 @@ public class EntryStoreImplTest {
 
     @Test
     public void addEntryTest() {
-        entryStore.saveJson("{\"temp\":10.5, \"hum\": 40.1, \"batt\": 10.1, \"water\": 3.4}");
+        entryStore.saveJson("{\"temp\":10.5, \"hum\": 40.1, \"batt\": 10.1, \"water\": 3.4, \"counter\": 1}");
 
         Collection<BootMeasureEntry> allEntries = entryStore.getAll();
         assertThat(allEntries, is(notNullValue()));
