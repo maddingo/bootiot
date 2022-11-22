@@ -8,7 +8,6 @@ import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
-import org.springframework.format.datetime.joda.DateTimeFormatterFactory;
 
 @SpringBootApplication
 @ServletComponentScan
@@ -28,13 +27,4 @@ public class Application {
 	public JsonParser jsonParser() {
         return new JacksonJsonParser();
     }
-
-    @Bean
-    public org.joda.time.format.DateTimeFormatter dateTimeFormatter() {
-		DateTimeFormatterFactory dtf = new DateTimeFormatterFactory("yyyy-mm-dd HH:MM:ss.SS");
-
-		return dtf.createDateTimeFormatter();
-	}
 }
-
-
